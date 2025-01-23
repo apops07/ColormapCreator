@@ -6,8 +6,20 @@ Created on Wed Jan 15 11:22:50 2025
 
 import numpy as np
 import os
+from PIL import Image, ImageDraw, ImageFont
+from sklearn.cluster import KMeans
 
 # Program that generates a color palette from an input image
+
+#Color extraction using K-Means clustering
+def extract_colors(image_path, n_colors):
+    img = Image.open(image_path).convert('RGB')
+    img_data = np.array(img)
+
+    pixels = img_data.reshape(-1,3)
+
+    kmeans = KMeans(n_clusters = n_colors, random_state = 17)
+    kmeans.fit(pixels)
 
 if __name__ == "__main__":
     image_path = input("Enter the path to the image file: ").strip()
