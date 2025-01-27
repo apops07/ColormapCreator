@@ -21,6 +21,16 @@ def extract_colors(image_path, n_colors):
     kmeans = KMeans(n_clusters = n_colors, random_state = 17)
     kmeans.fit(pixels)
 
+def pastelColors(color):
+    pastel = (np.array(color)+255//2)
+    return tuple(pastel)
+
+def ColormapCreator(image_path, n_colors):
+    colors = extract_colors(image_path, n_colors)
+    pastel = [pastelColors(color) for color in colors]
+    with open('Colormap_output.txt', 'w') as f:
+        f.write(tabulate(pastel))
+
 if __name__ == "__main__":
     image_path = input("Enter the path to the image file: ").strip()
     n_colors = int(input("Enter the number of colors to extract: "))
@@ -28,7 +38,7 @@ if __name__ == "__main__":
     if not os.path.exists(image_path):
         print("The specified file does not exist. Check if path is correct.")
     else:
-        output_img = generate_palette_image(image_path, n_colors)
+        output_img = ColormapCreator(image_path, n_colors)
         output_path = ".\output_palette.png"
         output_img.save(output_path)
         print(f"Palette image saved as {output_path}")
