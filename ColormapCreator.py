@@ -25,11 +25,19 @@ def pastelColors(color):
     pastel = (np.array(color)+255//2)
     return tuple(pastel)
 
+def saveToFile(colors, pastel_colors, output_path):
+    with open(output_path, "w") as file:
+        file.write(f"{'Regular Colormap':<20}{'Pastel Colormap':<20}\n")
+        for regular, pastel in zip(colors, pastel_colors):
+            regular_hex = '#{:02x}{:02x}{:02x}'.format(*regular)
+            pastel_hex = '#{:02x}{:02x}{:02x}'.format(*pastel)
+            file.write(f"{regular_hex:<20}{pastel_hex:<20}\n")
+
+
 def ColormapCreator(image_path, n_colors):
     colors = extract_colors(image_path, n_colors)
     pastel = [pastelColors(color) for color in colors]
-    with open('Colormap_output.txt', 'w') as f:
-        f.write(tabulate(pastel))
+
 
 if __name__ == "__main__":
     image_path = input("Enter the path to the image file: ").strip()
