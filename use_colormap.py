@@ -6,22 +6,26 @@ def load_palette(file_path, mode="Regular Colormap"):
     :param mode: "Regular Colormap" or "Pastel Colormap" to choose the color mode
     :return: Dictionary of colors {color_name: hex_value}
     """
-    palette = {}
+    palette = []
 
     with open(file_path, "r") as file:
+        first_line = True  # Track the first line (headers)
         for line in file:
             line = line.strip()
-            if line.startswith("#") or not line:  # Skip comments and empty lines
+            if first_line:  # Skip the header row
+                first_line = False
+                continue
+            if line.startswith("#>") or not line: 
                 continue
 
-            parts = line.split(",")
-            if len(parts) == 3:
-                name, regular, pastel = parts
+            parts = line.split()  # Use split() without arguments to handle multiple spaces/tabs
+            if len(parts) == 2:
+                regular, pastel = parts
                 if mode == "Regular Colormap":
-                    palette[name.lower()] = regular
+                    palette.append(regular)
                 elif mode == "Pastel Colormap":
-                    palette[name.lower()] = pastel
+                    palette.append(pastel)
                 else:
                     raise ValueError("Mode must be 'Regular Colormap' or 'Pastel Colormap'")
-    print(palette)
+                
     return palette
